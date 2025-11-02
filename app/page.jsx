@@ -12,20 +12,20 @@ const Header = ({ onMenuToggle }) => (
                     <Image
                         src="/logo.png"
                         alt="Magnani Chaveiro Logo"
-                        width={40}
-                        height={40}
+                        width={90}
+                        height={80}
                         priority
                     />
-                    <span className="font-russo-one tracking-wider">Magnani Chaveiro</span>
+                    {/* <span className="font-russo-one tracking-wider">Magnani Chaveiro</span> */}
                 </a>
             </div>
             <nav className="hidden md:flex space-x-8">
-                <a href="#servicos" className="hover:text-red-500 transition-colors duration-300">Serviços</a>
-                <a href="#galeria" className="hover:text-red-500 transition-colors duration-300">Galeria</a>
-                <a href="#sobre" className="hover:text-red-500 transition-colors duration-300">Sobre</a>
-                <a href="#contato" className="hover:text-red-500 transition-colors duration-300">Contato</a>
+                <a href="#servicos" className="transition-colors duration-300">Serviços</a>
+                <a href="#galeria" className=" transition-colors duration-300">Galeria</a>
+                <a href="#sobre" className="transition-colors duration-300">Sobre</a>
+                <a href="#contato" className=" transition-colors duration-300">Contato</a>
             </nav>
-            <a href="#contato" className="hidden md:block bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300">
+            <a href="#contato" className="hidden md:block hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300">
                 Orçamento Rápido
             </a>
             <button onClick={onMenuToggle} className="md:hidden text-white focus:outline-none" aria-label="Abrir menu">
@@ -39,7 +39,11 @@ const Header = ({ onMenuToggle }) => (
 
 
 const MobileMenu = ({ isOpen }) => (
-    <div className={`md:hidden px-6 pb-4 bg-gray-900/90 fixed top-[72px] left-0 right-0 z-40 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+    <div
+        className={`md:hidden px-6 pb-4 bg-gray-900/90 fixed top-[72px] left-0 right-0 z-40 transition-all duration-500 ease-in-out ${
+            isOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-10 pointer-events-none'
+        }`}
+    >
         <a href="#servicos" className="block py-2 text-center hover:text-red-500 transition-colors duration-300">Serviços</a>
         <a href="#galeria" className="block py-2 text-center hover:text-red-500 transition-colors duration-300">Galeria</a>
         <a href="#sobre" className="block py-2 text-center hover:text-red-500 transition-colors duration-300">Sobre</a>
@@ -101,7 +105,7 @@ const HeroSection = () => {
                     Atendimento rápido e profissional.
                 </p>
                 <a
-                    href="https://api.whatsapp.com/send?phone=11947120891"
+                    href="https://api.whatsapp.com/send/?phone=5511947120891&text&type=phone_number&app_absent=0"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform duration-300 inline-block transform hover:scale-105"
@@ -171,7 +175,7 @@ const GallerySection = () => {
     ];
 
     return (
-        <section id="galeria" className="py-20 bg-gray-900">
+        <section id="galeria" className="py-20 md:pb-20 pb-10 bg-gray-900">
             <div className="container mx-auto px-6">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-bold text-white">Galeria de Trabalhos</h2>
@@ -197,8 +201,8 @@ const GallerySection = () => {
 
 
 const AboutSection = () => (
-    <section id="sobre" className="py-20 bg-gray-800">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
+    <section id="sobre" className="py-20 md:pt-20 pt-10 bg-gray-800">
+        <div className="container mx-auto px-6 flex flex-col md:flex-row gap-12">
             <div className="md:w-1/2">
                 <div className="relative w-full h-96 rounded-lg shadow-2xl overflow-hidden">
                     <Image
