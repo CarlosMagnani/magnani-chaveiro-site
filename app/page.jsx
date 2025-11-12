@@ -9,14 +9,16 @@ const Header = ({ onMenuToggle }) => (
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
             <div className="text-2xl font-bold text-white">
                 <a href="#" className="flex items-center gap-3">
-                    <Image
-                        src="/logo.png"
-                        alt="Magnani Chaveiro Logo"
-                        width={90}
-                        height={80}
-                        priority
-                    />
-                    {/* <span className="font-russo-one tracking-wider">Magnani Chaveiro</span> */}
+                    <span className="relative block h-16 w-[9rem] md:h-20 md:w-[12rem]">
+                        <Image
+                            src="/logo.png"
+                            alt="Logotipo original da Magnani Chaveiro"
+                            priority
+                            fill
+                            sizes="(max-width: 768px) 9rem, 12rem"
+                            className="object-contain"
+                        />
+                    </span>
                 </a>
             </div>
             <nav className="hidden md:flex space-x-8">
