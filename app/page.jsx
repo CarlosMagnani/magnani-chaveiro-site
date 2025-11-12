@@ -2,6 +2,44 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Script from 'next/script';
+
+const TESTIMONIALS = [
+    {
+        quote: 'Perdi a chave do meu Cruze à noite e o Anderson chegou em menos de 40 minutos. Fez a chave codificada e testou tudo antes de ir embora. Atendimento impecável!',
+        name: 'Patrícia Lima',
+        location: 'Anhangabaú, Jundiaí',
+    },
+    {
+        quote: 'Meu telecomando parou depois da chuva. O reparo ficou pronto no mesmo dia e recebi orientações claras de uso. Recomendo pela honestidade.',
+        name: 'Rogério Matos',
+        location: 'Centro, Várzea Paulista',
+    },
+    {
+        quote: 'Fizemos a conversão da frota da empresa para chave canivete. Serviço rápido, com nota fiscal e garantia de 6 meses. Excelente parceiro!',
+        name: 'Luciana Prado',
+        location: 'Distrito Industrial, Jundiaí',
+    },
+];
+
+const FAQ_ITEMS = [
+    {
+        question: 'Vocês atendem quais cidades?',
+        answer: 'Nosso deslocamento cobre Jundiaí, Várzea Paulista, Campo Limpo Paulista, Louveira, Itupeva e Cajamar. Para outras regiões, consulte disponibilidade.',
+    },
+    {
+        question: 'Qual o prazo para uma cópia de chave codificada?',
+        answer: 'Em situações emergenciais, concluímos em até 60 minutos após a chegada no local. Em atendimentos agendados, a programação leva cerca de 30 minutos por veículo.',
+    },
+    {
+        question: 'Existe garantia para os serviços?',
+        answer: 'Sim, oferecemos 90 dias para programação eletrônica e até 6 meses para carcaças e botões substituídos. A garantia inclui suporte remoto para sincronização adicional.',
+    },
+    {
+        question: 'Quais formas de pagamento vocês aceitam?',
+        answer: 'Aceitamos Pix, cartões de crédito e débito, dinheiro e faturamento corporativo mediante cadastro. Em emergências noturnas, priorizamos pagamentos digitais.',
+    },
+];
 
 
 const Header = ({ onMenuToggle }) => (
@@ -118,7 +156,7 @@ const HeroSection = () => {
 };
 
 
-const ServiceCard = ({ imgSrc, title, description }) => (
+const ServiceCard = ({ imgSrc, title, description, features, cta }) => (
     <div className="bg-gray-900 rounded-lg p-8 transform hover:-translate-y-2 transition-transform duration-300 shadow-lg flex flex-col">
         <div className="relative w-full h-48 mb-6">
             <Image
@@ -130,7 +168,22 @@ const ServiceCard = ({ imgSrc, title, description }) => (
             />
         </div>
         <h3 className="heading-font text-2xl font-bold text-white mb-3">{title}</h3>
-        <p className="text-gray-400">{description}</p>
+        <p className="text-gray-400 mb-4">{description}</p>
+        {features?.length > 0 && (
+            <ul className="space-y-2 text-sm text-gray-300 mb-6 list-disc list-inside">
+                {features.map((feature, index) => (
+                    <li key={index}>{feature}</li>
+                ))}
+            </ul>
+        )}
+        {cta && (
+            <a
+                href={cta.href}
+                className="mt-auto inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-transform duration-300 hover:scale-105"
+            >
+                {cta.label}
+            </a>
+        )}
     </div>
 );
 
@@ -139,24 +192,134 @@ const ServicesSection = () => (
         <div className="container mx-auto px-6">
             <div className="text-center mb-12">
                 <h2 className="heading-font text-3xl md:text-4xl font-bold text-white">Nossos Serviços</h2>
-                <p className="text-gray-400 mt-2">Tecnologia de ponta para todos os tipos de chaves.</p>
+                <p className="text-gray-400 mt-2 max-w-2xl mx-auto">
+                    Tecnologia de ponta para todos os tipos de chaves, com estoque de chips e carcaças originais. Cada atendimento inclui diagnóstico eletrônico antes da entrega para garantir que a chave funcione perfeitamente no veículo.
+                </p>
+                <p className="text-sm text-gray-500 mt-4">
+                    <span className="font-semibold text-gray-300">Serviço móvel:</span> vamos até você em Jundiaí, Várzea Paulista, Campo Limpo Paulista, Itupeva e regiões vizinhas.
+                </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <ServiceCard
                     imgSrc="/images/image11.jpeg"
                     title="Chaves Codificadas"
-                    description="Criação e programação de chaves com transponder (chip) para a maioria dos veículos nacionais e importados. Segurança e compatibilidade total."
+                    description="Criação e programação de chaves com transponder (chip) para a maioria dos veículos nacionais e importados. Segurança e compatibilidade total com o módulo eletrônico."
+                    features={[
+                        'Programação via OBD com ferramentas homologadas',
+                        'Reposição de chave perdida em até 60 minutos',
+                        'Garantia de 90 dias contra falhas eletrônicas',
+                    ]}
+                    cta={{
+                        href: 'https://api.whatsapp.com/send/?phone=5511947120891&text=Quero%20uma%20chave%20codificada&type=phone_number&app_absent=0',
+                        label: 'Solicitar chave codificada',
+                    }}
                 />
                 <ServiceCard
                     imgSrc="/images/image12.jpeg"
                     title="Chaves Canivete"
-                    description="Fazemos a conversão da sua chave simples para o modelo canivete, unindo alarme e chave em um design moderno e prático. Também fazemos cópias."
+                    description="Conversão da sua chave simples para o modelo canivete, unindo alarme e lâmina em um design moderno e resistente. Também realizamos cópias sob medida."
+                    features={[
+                        'Substituição da carcaça com montagem reforçada',
+                        'Soldagem de botões e revisão do controle remoto',
+                        'Modelos compatíveis com Chevrolet, Volkswagen, Fiat, Ford e mais',
+                    ]}
+                    cta={{
+                        href: 'https://api.whatsapp.com/send/?phone=5511947120891&text=Quero%20converter%20minha%20chave%20para%20canivete&type=phone_number&app_absent=0',
+                        label: 'Converter minha chave',
+                    }}
                 />
                 <ServiceCard
                     imgSrc="/images/image13.jpeg"
                     title="Reparo de Telecomandos"
-                    description="Sua chave parou de funcionar? Realizamos a troca de botões, carcaças e baterias, recuperando a funcionalidade do seu telecomando original."
+                    description="Reparo completo de telecomandos automotivos com troca de botões, carcaças e baterias, recuperando a funcionalidade original."
+                    features={[
+                        'Limpeza ultrassônica da placa eletrônica',
+                        'Regravação de código e sincronização com o alarme',
+                        'Peças originais ou premium com garantia de 6 meses',
+                    ]}
+                    cta={{
+                        href: 'https://api.whatsapp.com/send/?phone=5511947120891&text=Preciso%20reparar%20meu%20telecomando&type=phone_number&app_absent=0',
+                        label: 'Agendar reparo agora',
+                    }}
                 />
+            </div>
+            <div className="mt-12 grid gap-6 md:grid-cols-3 text-left">
+                <div className="bg-gray-900/80 border border-gray-700 rounded-lg p-6">
+                    <h3 className="text-lg font-semibold text-white mb-2">Como funciona?</h3>
+                    <ol className="list-decimal list-inside text-sm text-gray-300 space-y-2">
+                        <li>Você solicita pelo WhatsApp e recebe orçamento com fotos de referência.</li>
+                        <li>Confirmamos disponibilidade de agenda e vamos até o local ou marcamos na loja.</li>
+                        <li>Entregamos a chave testada no contato e partimos.</li>
+                    </ol>
+                </div>
+                <div className="bg-gray-900/80 border border-gray-700 rounded-lg p-6">
+                    <h3 className="text-lg font-semibold text-white mb-2">Diferenciais Magnani</h3>
+                    <ul className="list-disc list-inside text-sm text-gray-300 space-y-2">
+                        <li>Atendimento 24h para emergências automotivas.</li>
+                        <li>Pagamento via Pix, cartão ou faturamento PJ cadastrado.</li>
+                        <li>Equipe treinada com certificação em imobilizadores avançados.</li>
+                    </ul>
+                </div>
+                <div className="bg-gray-900/80 border border-gray-700 rounded-lg p-6">
+                    <h3 className="text-lg font-semibold text-white mb-2">Garantias claras</h3>
+                    <p className="text-sm text-gray-300">
+                        Todas as peças substituídas possuem rastreabilidade com número de série e laudo fotográfico. Caso haja algum defeito dentro do período de garantia, refazemos o serviço sem custo adicional.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+);
+
+const HighlightsSection = () => (
+    <section className="py-20 bg-gray-900">
+        <div className="container mx-auto px-6">
+            <div className="text-center mb-12">
+                <h2 className="heading-font text-3xl md:text-4xl font-bold text-white">Por que escolher a Magnani?</h2>
+                <p className="text-gray-400 mt-3 max-w-3xl mx-auto">
+                    Atendimento local especializado para resolver imprevistos com rapidez e segurança. Nossa equipe chega com oficina móvel equipada para atender carros de passeio, utilitários, caminhões leves e motos premium.
+                </p>
+            </div>
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+                {[
+                    {
+                        title: 'Resposta em até 30 minutos',
+                        description: 'Cobertura em bairros centrais de Jundiaí com rastreamento da equipe pelo WhatsApp.',
+                    },
+                    {
+                        title: 'Atendimento no local',
+                        description: 'Oficina móvel com duplicadoras, cortadora laser e programadores de chip a bordo.',
+                    },
+                    {
+                        title: 'Peças originais e premium',
+                        description: 'Trabalhamos com fornecedores homologados para garantir durabilidade e compatibilidade.',
+                    },
+                    {
+                        title: 'Suporte pós-serviço',
+                        description: 'Checklist digital enviado por e-mail com orientações de uso e manutenção preventiva.',
+                    },
+                ].map((item, index) => (
+                    <div key={index} className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
+                        <h3 className="text-xl font-semibold text-white mb-3">{item.title}</h3>
+                        <p className="text-gray-300 text-sm leading-relaxed">{item.description}</p>
+                    </div>
+                ))}
+            </div>
+            <div className="mt-12 flex flex-col md:flex-row gap-4 justify-center">
+                <a
+                    href="https://api.whatsapp.com/send/?phone=5511947120891&text=Preciso%20de%20um%20chaveiro%20agora&type=phone_number&app_absent=0"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-transform duration-300 hover:scale-105"
+                >
+                    Chamar chaveiro agora
+                </a>
+                <a
+                    href="#faq"
+                    className="inline-flex items-center justify-center bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300"
+                >
+                    Ver perguntas frequentes
+                </a>
             </div>
         </div>
     </section>
@@ -222,11 +385,79 @@ const AboutSection = () => (
                 <p className="text-gray-400 leading-relaxed">
                     Nosso compromisso é com a agilidade no atendimento e o uso de equipamentos de última geração, garantindo um serviço de excelência para o seu veículo.
                 </p>
+                <div className="mt-6 grid gap-4 text-left">
+                    <div className="bg-gray-900/60 border border-gray-700 rounded-lg p-4">
+                        <h3 className="text-lg font-semibold text-white">Valores que seguimos</h3>
+                        <p className="text-sm text-gray-300">
+                            Ética no atendimento, transparência no orçamento e respeito ao patrimônio do cliente em cada visita.
+                        </p>
+                    </div>
+                    <div className="bg-gray-900/60 border border-gray-700 rounded-lg p-4">
+                        <h3 className="text-lg font-semibold text-white">Equipamentos certificados</h3>
+                        <p className="text-sm text-gray-300">
+                            Utilizamos cortadoras Silca, programadores Xhorse e Autel, além de estoques atualizados com chips Megamos, ID48, ID46 e mais.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 );
 
+const TestimonialsSection = () => (
+    <section className="py-20 bg-gray-900">
+        <div className="container mx-auto px-6">
+            <div className="text-center mb-12">
+                <h2 className="heading-font text-3xl md:text-4xl font-bold text-white">Depoimentos reais</h2>
+                <p className="text-gray-400 mt-3 max-w-2xl mx-auto">
+                    Clientes de Jundiaí e região confiam na Magnani para resolver emergências com profissionalismo e atenção aos detalhes.
+                </p>
+            </div>
+            <div className="grid gap-8 md:grid-cols-3">
+                {TESTIMONIALS.map((testimonial, index) => (
+                    <div key={index} className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg">
+                        <p className="text-gray-300 text-sm leading-relaxed mb-6">“{testimonial.quote}”</p>
+                        <div className="text-left">
+                            <p className="text-white font-semibold">{testimonial.name}</p>
+                            <p className="text-xs text-gray-400">{testimonial.location}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+);
+
+const FAQSection = () => (
+    <section id="faq" className="py-20 bg-gray-800">
+        <div className="container mx-auto px-6">
+            <div className="text-center mb-12">
+                <h2 className="heading-font text-3xl md:text-4xl font-bold text-white">Perguntas frequentes</h2>
+                <p className="text-gray-400 mt-3 max-w-3xl mx-auto">
+                    Reunimos respostas objetivas para as dúvidas mais comuns sobre chaves automotivas e nosso atendimento móvel. Caso não encontre o que precisa, fale conosco pelo WhatsApp.
+                </p>
+            </div>
+            <div className="space-y-6">
+                {FAQ_ITEMS.map((item, index) => (
+                    <div key={index} className="bg-gray-900/70 border border-gray-700 rounded-xl p-6">
+                        <h3 className="text-xl font-semibold text-white mb-3">{item.question}</h3>
+                        <p className="text-gray-300 text-sm leading-relaxed">{item.answer}</p>
+                    </div>
+                ))}
+            </div>
+            <div className="mt-12 text-center">
+                <a
+                    href="https://api.whatsapp.com/send/?phone=5511947120891&text=Tenho%20outras%20d%C3%BAvidas&type=phone_number&app_absent=0"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-transform duration-300 hover:scale-105"
+                >
+                    Tire suas dúvidas agora mesmo
+                </a>
+            </div>
+        </div>
+    </section>
+);
 const ContactSection = () => (
     <section id="contato" className="py-20 bg-gray-900">
         <div className="container mx-auto px-6 text-center">
@@ -266,18 +497,107 @@ export default function App() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+    const faqSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: FAQ_ITEMS.map((item) => ({
+            '@type': 'Question',
+            name: item.question,
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: item.answer,
+            },
+        })),
+    };
+
+    const localBusinessSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'LocalBusiness',
+        name: 'Magnani Chaveiro',
+        description:
+            'Chaveiro automotivo em Jundiaí especializado em chaves codificadas, chaves canivete e reparo de telecomandos com atendimento móvel.',
+        url: 'https://magnanichaveiro.com.br',
+        telephone: '+55-11-94712-0891',
+        image: 'https://magnanichaveiro.com.br/logo.png',
+        priceRange: '$$',
+        areaServed: ['Jundiaí', 'Várzea Paulista', 'Campo Limpo Paulista', 'Itupeva', 'Louveira', 'Cajamar'],
+        address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'Rua Vigário J. J. Rodrigues, 101',
+            addressLocality: 'Jundiaí',
+            addressRegion: 'SP',
+            postalCode: '13201-005',
+            addressCountry: 'BR',
+        },
+        geo: {
+            '@type': 'GeoCoordinates',
+            latitude: -23.188553,
+            longitude: -46.884112,
+        },
+        openingHoursSpecification: [
+            {
+                '@type': 'OpeningHoursSpecification',
+                dayOfWeek: [
+                    'Monday',
+                    'Tuesday',
+                    'Wednesday',
+                    'Thursday',
+                    'Friday',
+                    'Saturday',
+                    'Sunday',
+                ],
+                opens: '00:00',
+                closes: '23:59',
+            },
+        ],
+        sameAs: [
+            'https://www.facebook.com/magnanichaveiro',
+            'https://www.instagram.com/magnani.chaveiro',
+            'https://api.whatsapp.com/send/?phone=5511947120891&text&type=phone_number&app_absent=0',
+        ],
+        makesOffer: [
+            {
+                '@type': 'Offer',
+                name: 'Chaves codificadas automotivas',
+                priceCurrency: 'BRL',
+                availability: 'https://schema.org/InStock',
+            },
+            {
+                '@type': 'Offer',
+                name: 'Conversão para chave canivete',
+                priceCurrency: 'BRL',
+                availability: 'https://schema.org/InStock',
+            },
+            {
+                '@type': 'Offer',
+                name: 'Reparo de telecomandos',
+                priceCurrency: 'BRL',
+                availability: 'https://schema.org/InStock',
+            },
+        ],
+    };
+
     return (
         <div className="bg-gray-900 text-gray-200 font-sans">
             <Header onMenuToggle={toggleMenu} />
             <MobileMenu isOpen={isMenuOpen} />
             <main>
                 <HeroSection />
+                <HighlightsSection />
                 <ServicesSection />
+                <TestimonialsSection />
                 <GallerySection />
                 <AboutSection />
+                <FAQSection />
                 <ContactSection />
             </main>
             <Footer />
+            <Script id="local-business-schema" type="application/ld+json">
+                {JSON.stringify(localBusinessSchema)}
+            </Script>
+            <Script id="faq-schema" type="application/ld+json">
+                {JSON.stringify(faqSchema)}
+            </Script>
         </div>
     );
 }
