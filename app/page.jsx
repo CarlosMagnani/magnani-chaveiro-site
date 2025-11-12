@@ -94,7 +94,7 @@ const HeroSection = () => {
             <div className="absolute inset-0 bg-black/60 z-10" />
 
             <div className="relative z-20 container mx-auto px-6">
-                <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight mb-4">
+                <h1 className="heading-font text-4xl md:text-6xl font-bold text-white leading-tight mb-4">
                     <span className="font-russo-one tracking-wider block mb-2 text-red-500">
                         Magnani Chaveiro
                     </span>
@@ -129,7 +129,7 @@ const ServiceCard = ({ imgSrc, title, description }) => (
                 className="object-cover rounded-md"
             />
         </div>
-        <h3 className="text-2xl font-bold text-white mb-3">{title}</h3>
+        <h3 className="heading-font text-2xl font-bold text-white mb-3">{title}</h3>
         <p className="text-gray-400">{description}</p>
     </div>
 );
@@ -138,7 +138,7 @@ const ServicesSection = () => (
     <section id="servicos" className="py-20 bg-gray-800">
         <div className="container mx-auto px-6">
             <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-white">Nossos Serviços</h2>
+                <h2 className="heading-font text-3xl md:text-4xl font-bold text-white">Nossos Serviços</h2>
                 <p className="text-gray-400 mt-2">Tecnologia de ponta para todos os tipos de chaves.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -178,7 +178,7 @@ const GallerySection = () => {
         <section id="galeria" className="py-20 md:pb-20 pb-10 bg-gray-900">
             <div className="container mx-auto px-6">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold text-white">Galeria de Trabalhos</h2>
+                    <h2 className="heading-font text-3xl md:text-4xl font-bold text-white">Galeria de Trabalhos</h2>
                     <p className="text-gray-400 mt-2">Confira alguns dos nossos serviços realizados.</p>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -215,7 +215,7 @@ const AboutSection = () => (
                 </div>
             </div>
             <div className="md:w-1/2 text-center md:text-left">
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Mais de 20 anos de experiência</h2>
+                <h2 className="heading-font text-3xl md:text-4xl font-bold text-white mb-4">Mais de 20 anos de experiência</h2>
                 <p className="text-gray-400 leading-relaxed mb-6">
                     Com uma longa trajetória de dedicação e profissionalismo, a Magnani Chaveiro estabeleceu-se como referência em soluções automotivas, construindo uma sólida reputação baseada na confiança e na satisfação do cliente.
                 </p>
@@ -230,7 +230,7 @@ const AboutSection = () => (
 const ContactSection = () => (
     <section id="contato" className="py-20 bg-gray-900">
         <div className="container mx-auto px-6 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-white">Precisa de um Chaveiro Agora?</h2>
+            <h2 className="heading-font text-3xl md:text-4xl font-bold text-white">Precisa de um Chaveiro Agora?</h2>
             <p className="text-gray-400 mt-2 mb-8 max-w-2xl mx-auto">
                 Entre em contato para um orçamento sem compromisso. Atendimento de emergência disponível.
             </p>
