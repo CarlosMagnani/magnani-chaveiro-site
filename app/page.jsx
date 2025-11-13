@@ -3,44 +3,57 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 
+const ProgressiveImage = ({
+    wrapperClassName = '',
+    skeletonClassName = '',
+    className = '',
+    priority = false,
+    quality = 90,
+    onLoad,
+    ...props
+}) => {
+    const [isLoaded, setIsLoaded] = useState(false);
+    const handleLoad = (event) => {
+        setIsLoaded(true);
+        if (typeof onLoad === 'function') onLoad(event);
+    };
+
+    return (
+        <div className={`relative overflow-hidden ${props.fill ? '' : 'inline-block'} ${wrapperClassName}`}>
+            <div
+                aria-hidden="true"
+                className={`absolute inset-0 animate-pulse bg-brand-steel/40 transition-opacity duration-500 pointer-events-none ${isLoaded ? 'opacity-0' : 'opacity-100'} ${skeletonClassName}`}
+            />
+            <Image
+                {...props}
+                priority={priority}
+                quality={quality}
+                loading={priority ? undefined : 'lazy'}
+                onLoad={handleLoad}
+                className={`${className} transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+            />
+        </div>
+    );
+};
+
 const Header = ({ onMenuToggle }) => (
     <header className="bg-brand-midnight/85 backdrop-blur-md fixed top-0 left-0 right-0 z-50 border-b border-white/5">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
             <div className="text-2xl font-bold text-brand-aurora">
                 <a href="#" className="flex items-center gap-3">
-                    <Image src="/logo.png" alt="Magnani Chaveiro Logo" width={90} height={80} priority />
+                    <ProgressiveImage src="/logo.png" alt="Magnani Chaveiro Logo" width={128} height={96} priority />
                 </a>
             </div>
             <nav className="hidden md:flex items-center gap-10 text-sm uppercase tracking-[0.2em] text-accent-chrome">
-                <a href="#servicos" className="hover:text-brand-aurora transition-colors duration-300">Serviços</a>
-                <a href="#galeria" className="hover:text-brand-aurora transition-colors duration-300">Galeria</a>
-                <a href="#sobre" className="hover:text-brand-aurora transition-colors duration-300">Sobre</a>
-                <a href="#contato" className="hover:text-brand-aurora transition-colors duration-300">Contato</a>
+                <a href="#servicos" className="transition-colors duration-300 hover:text-accent-neon">Serviços</a>
+                <a href="#galeria" className="transition-colors duration-300 hover:text-accent-neon">Galeria</a>
+                <a href="#sobre" className="transition-colors duration-300 hover:text-accent-neon">Sobre</a>
+                <a href="#contato" className="transition-colors duration-300 hover:text-accent-neon">Contato</a>
             </nav>
             <div className="hidden md:flex items-center gap-4">
                 <a
-                    href="https://www.google.com/maps/place/Magnani+Chaveiro"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-accent-neon/40 bg-white/5 px-5 py-2 text-sm font-semibold text-accent-neon transition-colors duration-300 hover:bg-accent-neon/10"
-                >
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                        />
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M19.5 10.5c0 7.5-7.5 10.5-7.5 10.5S4.5 18 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                        />
-                    </svg>
-                    Ver rota
-                </a>
-                <a
                     href="#contato"
-                    className="cta-glow inline-flex items-center gap-2 rounded-full bg-brand-ember px-6 py-2 text-sm font-semibold text-white shadow-brand-soft transition-transform duration-300 hover:-translate-y-0.5"
+                    className="cta-glow inline-flex items-center gap-2 rounded-full bg-brand-ember px-6 py-2 text-sm font-semibold text-white shadow-brand-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-emberDark"
                 >
                     <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75 12 12.75l9.75-6" />
@@ -82,7 +95,7 @@ const MobileMenu = ({ isOpen }) => (
         </a>
         <a
             href="https://api.whatsapp.com/send/?phone=5511947120891&text&type=phone_number&app_absent=0"
-            className="block mt-3 rounded-full bg-brand-ember text-white font-semibold py-3 px-4 text-center shadow-brand-soft transition-transform duration-300 hover:-translate-y-0.5"
+            className="block mt-3 rounded-full bg-brand-ember text-white font-semibold py-3 px-4 text-center shadow-brand-soft transition-transform duration-300 hover:-translate-y-0.5 hover:bg-brand-emberDark"
         >
             Orçamento Rápido
         </a>
@@ -122,7 +135,15 @@ const HeroSection = () => {
                     key={index}
                     className={`absolute inset-0 transition-opacity duration-1000 ${index === currentIndex ? 'opacity-25' : 'opacity-0'}`}
                 >
-                    <Image src={src} alt={`Imagem ${index + 1}`} fill priority={index === 0} sizes="100vw" style={{ objectFit: 'cover' }} />
+                    <ProgressiveImage
+                        src={src}
+                        alt={`Imagem ${index + 1}`}
+                        fill
+                        priority={index === 0}
+                        sizes="100vw"
+                        wrapperClassName="relative w-full h-full"
+                        className="object-cover"
+                    />
                 </div>
             ))}
 
@@ -141,29 +162,31 @@ const HeroSection = () => {
                         Especialistas em chaves automotivas, clonagem de transponders e reparos de telecomandos com equipamentos de última geração.
                     </p>
 
-                    <div className="mt-10 flex flex-col sm:flex-row gap-4">
-                        <a
-                            href="https://api.whatsapp.com/send/?phone=5511947120891&text&type=phone_number&app_absent=0"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="cta-glow inline-flex items-center justify-center gap-3 rounded-full bg-brand-ember px-7 py-3 text-base font-semibold text-white shadow-brand-glow transition-transform duration-300 hover:-translate-y-0.5"
-                        >
-                            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
-                                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 3h15a1.5 1.5 0 0 1 1.5 1.5v15L16.5 15h-12A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3Z" />
+                    <div className="mt-10 w-full max-w-xl">
+                        <div className="cta-frame flex flex-col gap-4 sm:flex-row">
+                            <a
+                                href="https://api.whatsapp.com/send/?phone=5511947120891&text&type=phone_number&app_absent=0"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="cta-glow inline-flex flex-1 items-center justify-center gap-3 rounded-full bg-brand-ember px-7 py-3 text-base font-semibold text-white shadow-brand-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-emberDark"
+                            >
+                                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
+                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 3h15a1.5 1.5 0 0 1 1.5 1.5v15L16.5 15h-12A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3Z" />
+                                    </svg>
+                                </span>
+                                Fale pelo WhatsApp
+                            </a>
+                            <a
+                                href="#servicos"
+                                className="inline-flex flex-1 items-center justify-center gap-3 rounded-full border border-white/10 bg-white/10 px-7 py-3 text-base font-semibold text-brand-aurora transition-all duration-300 hover:border-accent-neon/70 hover:bg-accent-neon/10 hover:text-white"
+                            >
+                                <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                                 </svg>
-                            </span>
-                            Fale pelo WhatsApp
-                        </a>
-                        <a
-                            href="#servicos"
-                            className="inline-flex items-center justify-center gap-3 rounded-full border border-white/10 bg-white/5 px-7 py-3 text-base font-semibold text-brand-aurora transition-colors duration-300 hover:border-accent-neon/60 hover:bg-accent-neon/10"
-                        >
-                            <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                            </svg>
-                            Conheça os serviços
-                        </a>
+                                Conheça os serviços
+                            </a>
+                        </div>
                     </div>
 
                     <div className="mt-12 grid gap-6 sm:grid-cols-3">
@@ -182,9 +205,14 @@ const HeroSection = () => {
                         <div className="hero-panel col-span-4 md:col-span-3 md:row-span-2">
                             <span className="hero-panel__badge text-accent-neon">Tecnologia</span>
                             <div className="hero-panel__glow" />
-                            <div className="relative h-full w-full min-h-[220px]">
-                                <Image src="/images/image14.jpeg" alt="Equipamentos de codificação" fill className="object-cover" sizes="40vw" />
-                            </div>
+                            <ProgressiveImage
+                                src="/images/image14.jpeg"
+                                alt="Equipamentos de codificação"
+                                fill
+                                wrapperClassName="relative h-full w-full min-h-[220px]"
+                                className="object-cover"
+                                sizes="40vw"
+                            />
                         </div>
                         <div className="hero-panel col-span-4 md:col-span-3 flex flex-col justify-between p-6">
                             <div className="flex items-center gap-3 text-accent-neon">
@@ -203,24 +231,9 @@ const HeroSection = () => {
                                 </svg>
                             </a>
                         </div>
-                        <div className="hero-panel col-span-2 md:col-span-2 flex flex-col justify-center gap-2 p-6 text-brand-aurora">
-                            <span className="text-3xl font-bold">+2500</span>
-                            <p className="text-xs uppercase tracking-[0.35em] text-accent-chrome">chaves codificadas</p>
-                        </div>
-                        <div className="hero-panel col-span-2 md:col-span-4 flex items-center gap-6 p-6 md:p-8 bg-white/10">
-                            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-ember/30 text-white">
-                                <svg className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M2.25 6.75 12 12.75l9.75-6m-19.5 0 9.75 6m-9.75 0 9.75 6 9.75-6m-9.75 6v-6"
-                                    />
-                                </svg>
-                            </div>
-                            <div>
-                                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent-chrome">tempo médio</p>
-                                <p className="text-2xl font-bold text-brand-aurora">30 minutos</p>
-                            </div>
+                        <div className="hero-panel col-span-4 md:col-span-2 flex flex-col justify-center gap-2 p-6 text-brand-aurora">
+                            <span className="text-3xl font-bold">+25</span>
+                            <p className="text-xs uppercase tracking-[0.35em] text-accent-chrome">anos de experiência</p>
                         </div>
                     </div>
                 </div>
@@ -269,13 +282,18 @@ const servicesData = [
 ];
 
 const ServiceCard = ({ imgSrc, title, description, icon }) => (
-    <div className="diagonal-card bg-brand-steel/80 text-brand-aurora shadow-brand-soft transition-transform duration-500 hover:-translate-y-1">
+    <div className="diagonal-card bg-brand-steel/80 text-brand-aurora shadow-brand-soft transition-transform duration-500 hover:-translate-y-1 flex flex-col">
         <div className="diagonal-card__icon text-accent-neon">{icon}</div>
         <h3 className="heading-font text-2xl font-semibold mt-6">{title}</h3>
         <p className="text-accent-chrome mt-3 leading-relaxed">{description}</p>
-        <div className="relative mt-6 h-40 w-full overflow-hidden rounded-2xl border border-white/5">
-            <Image src={imgSrc} alt={`Serviço de ${title}`} fill sizes="100vw" className="object-cover" />
-        </div>
+        <ProgressiveImage
+            src={imgSrc}
+            alt={`Serviço de ${title}`}
+            fill
+            sizes="100vw"
+            className="object-cover"
+            wrapperClassName="relative mt-6 h-40 w-full overflow-hidden rounded-2xl border border-white/5"
+        />
     </div>
 );
 
@@ -283,47 +301,45 @@ const ServicesSection = () => (
     <section id="servicos" className="relative py-24 bg-brand-steel text-white">
         <div className="absolute inset-x-0 -top-20 h-40 bg-gradient-to-b from-transparent via-brand-steel/60 to-brand-steel" />
         <div className="container relative mx-auto px-6">
-            <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] items-start">
-                <div className="space-y-6">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-accent-neon">
-                        Especialidades
+            <div className="max-w-3xl mx-auto text-center space-y-6">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-accent-neon">
+                    Especialidades
+                </span>
+                <h2 className="heading-font text-3xl md:text-4xl font-bold text-brand-aurora">Nossos Serviços</h2>
+                <p className="text-accent-chrome leading-relaxed">
+                    Tecnologia de ponta, conhecimento técnico e atendimento personalizado para resolver do chaveiro básico ao mais avançado reparo eletrônico automotivo.
+                </p>
+            </div>
+            <div className="mt-10 max-w-4xl mx-auto flex flex-col gap-4 text-sm text-accent-chrome">
+                <div className="flex items-center gap-3 justify-center">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-ember/30 text-white">
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
                     </span>
-                    <h2 className="heading-font text-3xl md:text-4xl font-bold text-brand-aurora">Nossos Serviços</h2>
-                    <p className="text-accent-chrome leading-relaxed">
-                        Tecnologia de ponta, conhecimento técnico e atendimento personalizado para resolver do chaveiro básico ao mais avançado reparo eletrônico automotivo.
-                    </p>
-                    <div className="flex flex-col gap-3 text-sm text-accent-chrome">
-                        <div className="flex items-center gap-3">
-                            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-ember/30 text-white">
-                                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                </svg>
-                            </span>
-                            Programação de chaves reserva e cópia na hora
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-accent-neon/20 text-accent-neon">
-                                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75H21M3.75 12h10.5M3.75 17.25h6" />
-                                </svg>
-                            </span>
-                            Soluções integradas com alarmes e rastreadores
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-brand-aurora">
-                                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l3 3" />
-                                </svg>
-                            </span>
-                            Atendimento rápido com monitoramento em tempo real
-                        </div>
-                    </div>
+                    Programação de chaves reserva e cópia na hora
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {servicesData.map((service) => (
-                        <ServiceCard key={service.title} {...service} />
-                    ))}
+                <div className="flex items-center gap-3 justify-center">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-accent-neon/20 text-accent-neon">
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75H21M3.75 12h10.5M3.75 17.25h6" />
+                        </svg>
+                    </span>
+                    Soluções integradas com alarmes e rastreadores
                 </div>
+                <div className="flex items-center gap-3 justify-center">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-brand-aurora">
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l3 3" />
+                        </svg>
+                    </span>
+                    Atendimento rápido com monitoramento em tempo real
+                </div>
+            </div>
+            <div className="mt-16 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
+                {servicesData.map((service) => (
+                    <ServiceCard key={service.title} {...service} />
+                ))}
             </div>
         </div>
     </section>
@@ -331,27 +347,80 @@ const ServicesSection = () => (
 
 const GallerySection = () => {
     const galleryImages = [
-        '/images/image1.jpeg',
-        '/images/image2.jpeg',
-        '/images/image3.jpeg',
-        '/images/image4.jpeg',
-        '/images/image5.jpeg',
-        '/images/image6.jpeg',
-        '/images/image7.jpeg',
-        '/images/image8.jpeg',
+        {
+            src: '/images/image1.jpeg',
+            title: 'Chave reserva finalizada',
+            tag: 'Codificação expressa',
+            span: 'lg:col-span-2 lg:row-span-2',
+        },
+        {
+            src: '/images/image2.jpeg',
+            title: 'Projeto OEM homologado',
+            tag: 'Protocolos oficiais',
+            span: 'md:row-span-2',
+        },
+        {
+            src: '/images/image3.jpeg',
+            title: 'Reparo de telecomando premium',
+            tag: 'Solda eletrônica',
+        },
+        {
+            src: '/images/image4.jpeg',
+            title: 'Kit canivete personalizado',
+            tag: 'Design exclusivo',
+            span: 'lg:row-span-2',
+        },
+        {
+            src: '/images/image5.jpeg',
+            title: 'Alinhamento de transponder',
+            tag: 'Diagnóstico digital',
+        },
+        {
+            src: '/images/image6.jpeg',
+            title: 'Carcaça reforçada',
+            tag: 'Acabamento premium',
+        },
+        {
+            src: '/images/image7.jpeg',
+            title: 'Atendimento móvel in loco',
+            tag: 'Suporte imediato',
+            span: 'md:col-span-2',
+        },
+        {
+            src: '/images/image8.jpeg',
+            title: 'Testes de telecomando',
+            tag: 'Qualidade garantida',
+        },
     ];
 
     return (
         <section id="galeria" className="py-20 md:pb-24 pb-14 bg-black/80">
             <div className="container mx-auto px-6">
-                <div className="text-center mb-12">
-                    <h2 className="heading-font text-3xl md:text-4xl font-bold text-brand-aurora">Galeria de Trabalhos</h2>
-                    <p className="text-accent-chrome mt-2">Confira alguns dos nossos serviços realizados.</p>
+                <div className="text-center mb-12 max-w-3xl mx-auto">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-accent-neon">
+                        Portfólio vivo
+                    </span>
+                    <h2 className="heading-font text-3xl md:text-4xl font-bold text-brand-aurora mt-5">Galeria de Trabalhos</h2>
+                    <p className="text-accent-chrome mt-3">
+                        Um mosaico dos atendimentos recentes com recorte moderno para você sentir a energia da nossa oficina móvel.
+                    </p>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {galleryImages.map((src, index) => (
-                        <div key={index} className="relative w-full h-56 rounded-2xl overflow-hidden border border-white/5 shadow-brand-soft transform hover:scale-[1.02] transition-transform duration-300">
-                            <Image src={src} alt={`Trabalho realizado ${index + 1}`} fill sizes="33vw" className="object-cover" />
+                <div className="gallery-grid">
+                    {galleryImages.map(({ src, title, tag, span }, index) => (
+                        <div key={index} className={`gallery-card group ${span ?? ''}`.trim()}>
+                            <ProgressiveImage
+                                src={src}
+                                alt={title}
+                                fill
+                                sizes="(min-width: 1280px) 20vw, (min-width: 768px) 30vw, 45vw"
+                                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                wrapperClassName="block h-full w-full"
+                            />
+                            <div className="gallery-card__overlay" />
+                            <div className="gallery-card__content">
+                                <span className="gallery-card__tag">{tag}</span>
+                                <p className="gallery-card__title">{title}</p>
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -364,9 +433,14 @@ const AboutSection = () => (
     <section id="sobre" className="py-24 bg-brand-steel/80">
         <div className="container mx-auto px-6 flex flex-col md:flex-row gap-12">
             <div className="md:w-1/2">
-                <div className="relative w-full h-96 rounded-3xl overflow-hidden border border-white/10 shadow-brand-soft">
-                    <Image src="/images/image10.jpeg" alt="Retrato do chaveiro profissional" fill sizes="50vw" className="object-cover" />
-                </div>
+                <ProgressiveImage
+                    src="/images/image10.jpeg"
+                    alt="Retrato do chaveiro profissional"
+                    fill
+                    sizes="50vw"
+                    className="object-cover"
+                    wrapperClassName="relative w-full h-96 rounded-3xl overflow-hidden border border-white/10 shadow-brand-soft"
+                />
             </div>
             <div className="md:w-1/2 text-center md:text-left">
                 <h2 className="heading-font text-3xl md:text-4xl font-bold text-brand-aurora mb-4">Mais de 20 anos de experiência</h2>
@@ -385,20 +459,20 @@ const ContactSection = () => (
     <section id="contato" className="relative py-24 bg-brand-midnight">
         <div className="absolute inset-0 bg-contact-grid opacity-80" />
         <div className="relative container mx-auto px-6">
-            <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-stretch">
-                <div className="rounded-3xl border border-white/10 bg-white/5 p-10 shadow-brand-soft flex flex-col justify-between">
-                    <div>
+            <div className="max-w-5xl mx-auto rounded-3xl border border-white/10 bg-white/5 p-10 shadow-brand-soft">
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+                    <div className="flex-1">
                         <span className="inline-flex items-center gap-2 rounded-full border border-accent-neon/30 bg-brand-steel/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-accent-neon">
                             Atendimento imediato
                         </span>
                         <h2 className="heading-font text-3xl md:text-4xl font-bold text-brand-aurora mt-6">
-                            Precisa de um Chaveiro Agora?
+                            Precisa de um chaveiro agora?
                         </h2>
-                        <p className="text-accent-chrome mt-4 leading-relaxed max-w-xl">
+                        <p className="text-accent-chrome mt-4 leading-relaxed max-w-2xl">
                             Entre em contato para um orçamento sem compromisso. Atendimento de emergência disponível para toda a região de Jundiaí.
                         </p>
                     </div>
-                    <div className="mt-10 space-y-6 text-brand-aurora">
+                    <div className="flex-1 space-y-6 text-brand-aurora">
                         <div className="flex items-center gap-4">
                             <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-ember/30 text-white">
                                 <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
@@ -431,42 +505,29 @@ const ContactSection = () => (
                         </div>
                     </div>
                 </div>
-
-                <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/10 shadow-brand-glow">
-                    <div className="absolute inset-0 bg-gradient-to-br from-brand-ember/25 via-transparent to-accent-neon/20" />
-                    <div className="relative h-full w-full p-8 flex flex-col justify-between">
-                        <div>
-                            <p className="text-sm uppercase tracking-[0.35em] text-accent-chrome">Disponibilidade</p>
-                            <h3 className="heading-font text-2xl font-semibold text-brand-aurora mt-3">Domingo a domingo</h3>
-                            <p className="mt-2 text-accent-chrome">Atendimento presencial e remoto conforme a necessidade do cliente.</p>
-                        </div>
-                        <div className="mt-10 space-y-4">
-                            <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-brand-steel/60 px-6 py-4">
-                                <div>
-                                    <p className="text-xs uppercase tracking-[0.3em] text-accent-chrome">Tempo estimado</p>
-                                    <p className="text-lg font-semibold text-brand-aurora">Chegada em até 30 min</p>
-                                </div>
-                                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-ember text-white">
-                                    <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l3 3" />
-                                    </svg>
-                                </span>
-                            </div>
-                            <div className="rounded-2xl border border-white/10 bg-brand-steel/60 px-6 py-5">
-                                <p className="text-xs uppercase tracking-[0.3em] text-accent-chrome">Formas de pagamento</p>
-                                <p className="mt-2 text-brand-aurora font-semibold">Cartão, PIX, transferência e faturamento para frotas.</p>
-                            </div>
-                        </div>
-                        <a
-                            href="https://api.whatsapp.com/send/?phone=5511947120891&text&type=phone_number&app_absent=0"
-                            className="mt-10 inline-flex items-center justify-center gap-3 rounded-full bg-brand-ember px-6 py-3 text-base font-semibold text-white shadow-brand-soft transition-transform duration-300 hover:-translate-y-0.5"
-                        >
-                            <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m0 0-4.5-4.5M12 19.5l4.5-4.5" />
-                            </svg>
-                            Solicitar retorno agora
-                        </a>
-                    </div>
+                <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
+                    <a
+                        href="https://api.whatsapp.com/send/?phone=5511947120891&text&type=phone_number&app_absent=0"
+                        className="inline-flex w-full sm:w-auto items-center justify-center gap-3 rounded-full bg-brand-ember px-7 py-3 text-base font-semibold text-white shadow-brand-soft transition-transform duration-300 hover:-translate-y-0.5 hover:bg-brand-ember/90"
+                    >
+                        <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m0 0-4.5-4.5M12 19.5l4.5-4.5" />
+                        </svg>
+                        Solicitar orçamento agora
+                    </a>
+                    <a
+                        href="tel:+5511947120891"
+                        className="inline-flex w-full sm:w-auto items-center justify-center gap-3 rounded-full border border-white/10 bg-white/5 px-7 py-3 text-base font-semibold text-brand-aurora transition-colors duration-300 hover:border-accent-neon/60 hover:bg-accent-neon/10"
+                    >
+                        <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M2.25 6.75a.75.75 0 0 1 .75-.75h3.443c.307 0 .575.196.696.485l1.589 3.847a.75.75 0 0 1-.083.712l-1.293 1.723a.75.75 0 0 0 .073.967l2.143 2.143a.75.75 0 0 0 .966.073l1.723-1.293a.75.75 0 0 1 .712-.083l3.847 1.589a.75.75 0 0 1 .485.696V21a.75.75 0 0 1-.75.75H19.5"
+                            />
+                        </svg>
+                        Ligar agora
+                    </a>
                 </div>
             </div>
         </div>
