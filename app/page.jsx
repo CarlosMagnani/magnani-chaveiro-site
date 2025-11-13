@@ -459,17 +459,20 @@ const ContactSection = () => (
     <section id="contato" className="relative py-24 bg-brand-midnight">
         <div className="absolute inset-0 bg-contact-grid opacity-80" />
         <div className="relative container mx-auto px-6">
-            <div className="flex justify-center">
-                <div className="w-full max-w-4xl rounded-3xl border border-white/10 bg-white/5 p-10 shadow-brand-soft flex flex-col justify-between">
-                    <div>
-                        <h2 className="heading-font text-3xl md:text-4xl font-bold text-brand-aurora">
+            <div className="max-w-5xl mx-auto rounded-3xl border border-white/10 bg-white/5 p-10 shadow-brand-soft">
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+                    <div className="flex-1">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-accent-neon/30 bg-brand-steel/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-accent-neon">
+                            Atendimento imediato
+                        </span>
+                        <h2 className="heading-font text-3xl md:text-4xl font-bold text-brand-aurora mt-6">
                             Precisa de um chaveiro agora?
                         </h2>
-                        <p className="text-accent-chrome mt-5 leading-relaxed max-w-xl">
+                        <p className="text-accent-chrome mt-4 leading-relaxed max-w-2xl">
                             Entre em contato para um orçamento sem compromisso. Atendimento de emergência disponível para toda a região de Jundiaí.
                         </p>
                     </div>
-                    <div className="mt-10 space-y-6 text-brand-aurora">
+                    <div className="flex-1 space-y-6 text-brand-aurora">
                         <div className="flex items-center gap-4">
                             <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-ember/30 text-white">
                                 <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
@@ -501,6 +504,30 @@ const ContactSection = () => (
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
+                    <a
+                        href="https://api.whatsapp.com/send/?phone=5511947120891&text&type=phone_number&app_absent=0"
+                        className="inline-flex w-full sm:w-auto items-center justify-center gap-3 rounded-full bg-brand-ember px-7 py-3 text-base font-semibold text-white shadow-brand-soft transition-transform duration-300 hover:-translate-y-0.5 hover:bg-brand-ember/90"
+                    >
+                        <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m0 0-4.5-4.5M12 19.5l4.5-4.5" />
+                        </svg>
+                        Solicitar orçamento agora
+                    </a>
+                    <a
+                        href="tel:+5511947120891"
+                        className="inline-flex w-full sm:w-auto items-center justify-center gap-3 rounded-full border border-white/10 bg-white/5 px-7 py-3 text-base font-semibold text-brand-aurora transition-colors duration-300 hover:border-accent-neon/60 hover:bg-accent-neon/10"
+                    >
+                        <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M2.25 6.75a.75.75 0 0 1 .75-.75h3.443c.307 0 .575.196.696.485l1.589 3.847a.75.75 0 0 1-.083.712l-1.293 1.723a.75.75 0 0 0 .073.967l2.143 2.143a.75.75 0 0 0 .966.073l1.723-1.293a.75.75 0 0 1 .712-.083l3.847 1.589a.75.75 0 0 1 .485.696V21a.75.75 0 0 1-.75.75H19.5"
+                            />
+                        </svg>
+                        Ligar agora
+                    </a>
                 </div>
             </div>
         </div>
