@@ -3,12 +3,45 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 
+const ProgressiveImage = ({
+    wrapperClassName = '',
+    skeletonClassName = '',
+    className = '',
+    priority = false,
+    quality = 90,
+    onLoad,
+    ...props
+}) => {
+    const [isLoaded, setIsLoaded] = useState(false);
+    const handleLoad = (event) => {
+        setIsLoaded(true);
+        if (typeof onLoad === 'function') onLoad(event);
+    };
+
+    return (
+        <div className={`relative overflow-hidden ${props.fill ? '' : 'inline-block'} ${wrapperClassName}`}>
+            <div
+                aria-hidden="true"
+                className={`absolute inset-0 animate-pulse bg-brand-steel/40 transition-opacity duration-500 pointer-events-none ${isLoaded ? 'opacity-0' : 'opacity-100'} ${skeletonClassName}`}
+            />
+            <Image
+                {...props}
+                priority={priority}
+                quality={quality}
+                loading={priority ? undefined : 'lazy'}
+                onLoad={handleLoad}
+                className={`${className} transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+            />
+        </div>
+    );
+};
+
 const Header = ({ onMenuToggle }) => (
     <header className="bg-brand-midnight/85 backdrop-blur-md fixed top-0 left-0 right-0 z-50 border-b border-white/5">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
             <div className="text-2xl font-bold text-brand-aurora">
                 <a href="#" className="flex items-center gap-3">
-                    <Image src="/logo.png" alt="Magnani Chaveiro Logo" width={128} height={96} priority />
+                    <ProgressiveImage src="/logo.png" alt="Magnani Chaveiro Logo" width={128} height={96} priority />
                 </a>
             </div>
             <nav className="hidden md:flex items-center gap-10 text-sm uppercase tracking-[0.2em] text-accent-chrome">
@@ -102,7 +135,15 @@ const HeroSection = () => {
                     key={index}
                     className={`absolute inset-0 transition-opacity duration-1000 ${index === currentIndex ? 'opacity-25' : 'opacity-0'}`}
                 >
-                    <Image src={src} alt={`Imagem ${index + 1}`} fill priority={index === 0} sizes="100vw" style={{ objectFit: 'cover' }} />
+                    <ProgressiveImage
+                        src={src}
+                        alt={`Imagem ${index + 1}`}
+                        fill
+                        priority={index === 0}
+                        sizes="100vw"
+                        wrapperClassName="relative w-full h-full"
+                        className="object-cover"
+                    />
                 </div>
             ))}
 
@@ -164,9 +205,14 @@ const HeroSection = () => {
                         <div className="hero-panel col-span-4 md:col-span-3 md:row-span-2">
                             <span className="hero-panel__badge text-accent-neon">Tecnologia</span>
                             <div className="hero-panel__glow" />
-                            <div className="relative h-full w-full min-h-[220px]">
-                                <Image src="/images/image14.jpeg" alt="Equipamentos de codificação" fill className="object-cover" sizes="40vw" />
-                            </div>
+                            <ProgressiveImage
+                                src="/images/image14.jpeg"
+                                alt="Equipamentos de codificação"
+                                fill
+                                wrapperClassName="relative h-full w-full min-h-[220px]"
+                                className="object-cover"
+                                sizes="40vw"
+                            />
                         </div>
                         <div className="hero-panel col-span-4 md:col-span-3 flex flex-col justify-between p-6">
                             <div className="flex items-center gap-3 text-accent-neon">
@@ -240,9 +286,14 @@ const ServiceCard = ({ imgSrc, title, description, icon }) => (
         <div className="diagonal-card__icon text-accent-neon">{icon}</div>
         <h3 className="heading-font text-2xl font-semibold mt-6">{title}</h3>
         <p className="text-accent-chrome mt-3 leading-relaxed">{description}</p>
-        <div className="relative mt-6 h-40 w-full overflow-hidden rounded-2xl border border-white/5">
-            <Image src={imgSrc} alt={`Serviço de ${title}`} fill sizes="100vw" className="object-cover" />
-        </div>
+        <ProgressiveImage
+            src={imgSrc}
+            alt={`Serviço de ${title}`}
+            fill
+            sizes="100vw"
+            className="object-cover"
+            wrapperClassName="relative mt-6 h-40 w-full overflow-hidden rounded-2xl border border-white/5"
+        />
     </div>
 );
 
@@ -357,12 +408,13 @@ const GallerySection = () => {
                 <div className="gallery-grid">
                     {galleryImages.map(({ src, title, tag, span }, index) => (
                         <div key={index} className={`gallery-card group ${span ?? ''}`.trim()}>
-                            <Image
+                            <ProgressiveImage
                                 src={src}
                                 alt={title}
                                 fill
                                 sizes="(min-width: 1280px) 20vw, (min-width: 768px) 30vw, 45vw"
                                 className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                wrapperClassName="block h-full w-full"
                             />
                             <div className="gallery-card__overlay" />
                             <div className="gallery-card__content">
@@ -381,9 +433,14 @@ const AboutSection = () => (
     <section id="sobre" className="py-24 bg-brand-steel/80">
         <div className="container mx-auto px-6 flex flex-col md:flex-row gap-12">
             <div className="md:w-1/2">
-                <div className="relative w-full h-96 rounded-3xl overflow-hidden border border-white/10 shadow-brand-soft">
-                    <Image src="/images/image10.jpeg" alt="Retrato do chaveiro profissional" fill sizes="50vw" className="object-cover" />
-                </div>
+                <ProgressiveImage
+                    src="/images/image10.jpeg"
+                    alt="Retrato do chaveiro profissional"
+                    fill
+                    sizes="50vw"
+                    className="object-cover"
+                    wrapperClassName="relative w-full h-96 rounded-3xl overflow-hidden border border-white/10 shadow-brand-soft"
+                />
             </div>
             <div className="md:w-1/2 text-center md:text-left">
                 <h2 className="heading-font text-3xl md:text-4xl font-bold text-brand-aurora mb-4">Mais de 20 anos de experiência</h2>
@@ -402,8 +459,8 @@ const ContactSection = () => (
     <section id="contato" className="relative py-24 bg-brand-midnight">
         <div className="absolute inset-0 bg-contact-grid opacity-80" />
         <div className="relative container mx-auto px-6">
-            <div className="grid gap-10 lg:grid-cols-1 items-stretch">
-                <div className="rounded-3xl border border-white/10 bg-white/5 p-10 shadow-brand-soft flex flex-col justify-between">
+            <div className="flex justify-center">
+                <div className="w-full max-w-4xl rounded-3xl border border-white/10 bg-white/5 p-10 shadow-brand-soft flex flex-col justify-between">
                     <div>
                         <h2 className="heading-font text-3xl md:text-4xl font-bold text-brand-aurora">
                             Precisa de um chaveiro agora?
